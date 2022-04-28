@@ -44,8 +44,10 @@ class MyApp extends StatelessWidget {
           '/mainPage': (BuildContext context) => const TopPage(),
           '/addDishes': (BuildContext context) => const AddDishes(),
           '/viewPage': (BuildContext context) => const ViewPage(),
+
           '/chicken' : (BuildContext context) => ListPage(genre: '鶏肉'),
           '/pig' : (BuildContext context) => ListPage(genre: '豚'),
+          '/cow' :(BuildContext context) => ListPage(genre: '牛',)
         },
         home: const LoginPage(),
       ),
