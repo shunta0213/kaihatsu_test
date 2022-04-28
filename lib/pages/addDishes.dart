@@ -10,7 +10,6 @@ class AddDishes extends StatefulWidget {
   State<AddDishes> createState() => _AddDishesState();
 }
 
-
 class _AddDishesState extends State<AddDishes> {
   // For FireStore
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -18,24 +17,18 @@ class _AddDishesState extends State<AddDishes> {
   String? _dishName;
   String? _genre;
   String? _notes;
+
   // Get date
   DateTime now = DateTime.now();
   DateFormat formattedDate = DateFormat('yyyy-MM-dd');
+
 
   @override
   Widget build(BuildContext context) {
     // For Firestore
     final uid = auth.currentUser!.uid;
     DocumentReference user = db.collection('User').doc(uid);
-    Future<void> addDishes() {
-      return user.collection(_genre!).doc(_dishName).set({
-        'name': _dishName,
-        'genre': _genre,
-        'notes': _notes,
-        'date': now,
-      }).catchError((error) => print('error : $error'));
-    }
-
+    //
     return Scaffold(
       // 基本ここに書いていく
       body: Center(
@@ -84,6 +77,13 @@ class _AddDishesState extends State<AddDishes> {
                 onChanged: (String? value) {
                   _dishName = value;
                 },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '文字を入力してください';
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(
@@ -102,11 +102,26 @@ class _AddDishesState extends State<AddDishes> {
                 onChanged: (String? value) {
                   _notes = value;
                 },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '文字を入力してください';
+                  }
+                  return null;
+                },
               ),
             ),
             TextButton(
-              onPressed: () {
-                addDishes;
+              onPressed: () async {
+                await user.collection(_genre!).doc(_dishName).set(
+                  {
+                    'name': _dishName,
+                    'genre': _genre,
+                    'notes': _notes,
+                    'date': now,
+                  },
+                  SetOptions(merge: true),
+                ).catchError((error) => print('error : $error'));
                 Navigator.of(context).pop();
               },
               child: const Icon(
