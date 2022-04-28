@@ -74,6 +74,17 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
+  assets:
+    - assets/images/logo_1.png
+    - assets/images/logo_2.png
+    - assets/images/logo_3.png
+    - assets/images/logo_4.png
+    - assets/images/logo_5.png
+    - assets/images/logo_6.png
+    - assets/images/logo_7.png
+    - assets/images/logo_8.png
+
+
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -99,3 +110,5 @@ flutter:
     - family: TestIcon
       fonts:
         - asset: assets/fonts/TestIcon.ttf
+
+

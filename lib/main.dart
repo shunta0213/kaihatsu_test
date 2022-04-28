@@ -45,9 +45,17 @@ class MyApp extends StatelessWidget {
           '/addDishes': (BuildContext context) => const AddDishes(),
           '/viewPage': (BuildContext context) => const ViewPage(),
 
-          '/chicken' : (BuildContext context) => ListPage(genre: '鶏肉'),
-          '/pig' : (BuildContext context) => ListPage(genre: '豚'),
-          '/cow' :(BuildContext context) => ListPage(genre: '牛',)
+          '/chicken': (BuildContext context) => ListPage(
+              genre: '鶏肉', icon: Image.asset('assets/images/logo_3.png')
+          ),
+          '/pig': (BuildContext context) => ListPage(
+                genre: '豚',
+                icon: Image.asset('assets/images/logo_2.png'),
+              ),
+          '/cow': (BuildContext context) => ListPage(
+                genre: '牛',
+                icon: Image.asset('assets/images/logo_1.png'),
+              ),
         },
         home: const LoginPage(),
       ),

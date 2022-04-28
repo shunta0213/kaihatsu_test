@@ -6,8 +6,12 @@ import 'package:intl/intl.dart';
 
 class ListPage extends StatelessWidget {
   final String? genre;
-
-  ListPage({this.genre, Key? key}) : super(key: key);
+  final Widget? icon;
+  ListPage({
+    required this.genre,
+    required this.icon,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +29,9 @@ class ListPage extends StatelessWidget {
               flex: 1,
               child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Text(
-                    'Hello',
-                  ))),
+                  child: icon,
+              ),
+          ),
           FutureBuilder<QuerySnapshot>(
             future: user.collection(genre!).orderBy('date', descending: true).get(),
             builder:
