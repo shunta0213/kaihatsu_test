@@ -7,7 +7,7 @@ import 'package:kaihatsudojo/pages/top.dart';
 import 'package:kaihatsudojo/pages/addDishes.dart';
 import 'package:kaihatsudojo/pages/viewPage.dart';
 import 'package:kaihatsudojo/pages/authentication.dart';
-import 'package:kaihatsudojo/components/chicken.dart';
+import 'package:kaihatsudojo/components/dishList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,8 @@ class MyApp extends StatelessWidget {
           '/mainPage': (BuildContext context) => const TopPage(),
           '/addDishes': (BuildContext context) => const AddDishes(),
           '/viewPage': (BuildContext context) => const ViewPage(),
-          '/listPage' : (BuildContext context) => const ListPage(),
+          '/chicken' : (BuildContext context) => ListPage(genre: '鶏肉'),
+          '/pig' : (BuildContext context) => ListPage(genre: '豚'),
         },
         home: const LoginPage(),
       ),

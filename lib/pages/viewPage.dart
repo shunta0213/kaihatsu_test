@@ -40,7 +40,7 @@ class _ViewPageState extends State<ViewPage> {
                 SizedBox(
                   height: 80,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pushNamed('/listPage'),
+                    onPressed: () => Navigator.of(context).pushNamed('/chicken'),
                     child: const Icon(
                       Icons.pets,
                       size: 50,
@@ -60,7 +60,7 @@ class _ViewPageState extends State<ViewPage> {
                 SizedBox(
                   height: 80,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.of(context).pushNamed('/pig'),
                     child: const Icon(
                       Icons.pets,
                       size: 50,

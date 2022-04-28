@@ -58,7 +58,7 @@ class _AddDishesState extends State<AddDishes> {
                     value: '鶏肉',
                   ),
                   DropdownMenuItem(
-                    child: Text('豚'),
+                    child: Text('豚肉'),
                     value: '豚',
                   ),
                 ],
@@ -105,10 +105,13 @@ class _AddDishesState extends State<AddDishes> {
               ),
             ),
             TextButton(
-              onPressed: addDishes,
+              onPressed: () {
+                addDishes;
+                Navigator.of(context).pop();
+              },
               child: const Icon(
                 Icons.check_circle,
-                size: 40,
+                size: 60,
               ),
             ),
           ],
