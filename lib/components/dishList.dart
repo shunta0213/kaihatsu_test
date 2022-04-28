@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ListPage extends StatelessWidget {
   final String? genre;
   final Widget? icon;
-  ListPage({
+
+  const ListPage({
     required this.genre,
     required this.icon,
     Key? key,
@@ -26,18 +26,18 @@ class ListPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-              flex: 1,
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: icon,
-              ),
+            flex: 1,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: icon,
+            ),
           ),
           FutureBuilder<QuerySnapshot>(
-            future: user.collection(genre!).orderBy('date', descending: true).get(),
+            future:
+                user.collection(genre!).orderBy('date', descending: true).get(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-
-              if(snapshot.hasError){
+              if (snapshot.hasError) {
                 return const Text('Something went wrong');
               } else if (snapshot.connectionState != ConnectionState.done) {
                 return const CircularProgressIndicator();
@@ -50,26 +50,34 @@ class ListPage extends StatelessWidget {
                   child: ListView(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
-                      DateTime time = document.get('date').toDate();
-                      DateFormat dateFormat = DateFormat('[MM/dd]');
-                      String date = dateFormat.format(time);
 
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          tileColor: Colors.white,
-                          leading: const Icon(
-                            Icons.circle,
-                            size: 10,
-                          ),
-                          title: Text(document.get('name')),
-                          subtitle: Text(date + document.get('notes')),
-                          dense: true,
-                          contentPadding: const EdgeInsets.all(8),
+                      return ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
+                        tileColor: Colors.white,
+                        leading: const Icon(
+                          Icons.circle,
+                          size: 10,
+                        ),
+                        title: Text(document.get('name')),
+                        subtitle: Column(children: [
+                          Text(DateFormat('作成日 : yyyy/MM/dd')
+                              .format(document.get('date').toDate())),
+                          Text(document.get('notes') ?? ''),
+                        ]),
+                        trailing: TextButton(
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('User')
+                                  .doc(uid)
+                                  .collection(genre!)
+                                  .doc(document.get('name'))
+                                  .delete();
+                            },
+                            child: const Icon(Icons.delete)),
+                        dense: true,
+                        contentPadding: const EdgeInsets.all(8),
                       );
                     }).toList(),
                   ),
@@ -79,11 +87,11 @@ class ListPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         padding: const EdgeInsets.only(bottom: 10),
         child: FloatingActionButton(
-          child: const Icon(Icons.arrow_left_outlined),
+          child: const Icon(Icons.clear),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
