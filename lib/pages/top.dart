@@ -17,7 +17,6 @@ class _TopPageState extends State<TopPage> {
   Widget build(BuildContext context) {
     // For Firebase Auth and Firestore
     final auth = FirebaseAuth.instance;
-    final db = FirebaseFirestore.instance;
     final uid = auth.currentUser!.uid;
 
     // For Bottom Bar
