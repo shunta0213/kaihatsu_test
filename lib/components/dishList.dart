@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ListPage extends StatelessWidget {
-  const ListPage({Key? key}) : super(key: key);
+  final String? genre;
+
+  ListPage({this.genre, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +21,28 @@ class ListPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(flex: 1, child: Align(alignment: Alignment.bottomCenter, child: Text('Hello',))),
+          Flexible(
+              flex: 1,
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    'Hello',
+                  ))),
           FutureBuilder<QuerySnapshot>(
-            future: user.collection('鶏肉').get(),
+            future: user.collection(genre!).orderBy('date', descending: true).get(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              return Expanded(
+
+              if(snapshot.hasError){
+                return const Text('Something went wrong');
+              } else if (snapshot.connectionState != ConnectionState.done) {
+                return const CircularProgressIndicator();
+              }
+
+              return Flexible(
                 flex: 8,
                 child: SizedBox(
-                  height: deviceHeight * 0.8,
+                  height: deviceHeight * 0.7,
                   child: ListView(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -61,9 +76,12 @@ class ListPage extends StatelessWidget {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.arrow_left_outlined),
-        onPressed: () => Navigator.of(context).pop(),
+      floatingActionButton: Container(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton(
+          child: const Icon(Icons.arrow_left_outlined),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
     );
   }
