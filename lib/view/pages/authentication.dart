@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kaihatsudojo/main.dart';
+import 'package:kaihatsudojo/model/authenticationData.dart';
 import 'package:provider/provider.dart';
 
 // ログイン
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
   String _email = "";
   String _password = "";
   String _infoText = "";
@@ -20,51 +15,53 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final UserState userState = Provider.of<UserState>(context);
+    final AuthenticationDataClass dataClass =
+        Provider.of<AuthenticationDataClass>(context);
 
     return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'メール',
-              ),
-              onChanged: (String value) {
-                _email = value;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-            child: TextFormField(
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: 'パスワード',
-                suffixIcon: IconButton(
-                  tooltip: 'Show Password',
-                  icon: Icon(
-                      _passwordVeil ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVeil = !_passwordVeil;
-                    });
-                  },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'メール',
                 ),
+                onChanged: (String value) {
+                  _email = value;
+                },
               ),
-              obscureText: _passwordVeil,
-              onChanged: (String value) {
-                _password = value;
-              },
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'パスワード',
+                  suffixIcon: IconButton(
+                    tooltip: 'Show Password',
+                    icon: Icon(_passwordVeil
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                    onPressed: () {
+                      dataClass.passwordVeil;
+                    },
+                  ),
+                ),
+                obscureText: _passwordVeil,
+                onChanged: (String value) {
+                  _password = value;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -75,26 +72,16 @@ class _LoginPageState extends State<LoginPage> {
                               .signInWithEmailAndPassword(
                                   email: _email, password: _password);
                           // ユーザー情報更新
-                          userState.setUser(signIn.user!);
+                          dataClass.setUser(signIn.user!);
                           await Navigator.of(context)
                               .pushReplacementNamed('/mainPage');
                         } catch (e) {
-                          // Error
-                          setState(() {
-                            _errorText = e.toString();
-                          });
+                          dataClass.setErrorText(_errorText, e.toString());
+                          print(_errorText);
                           showDialog(
                               context: context,
                               builder: (_) {
-                                return AlertDialog(
-                                  title: const Text("ログインに失敗しました"),
-                                  content: Text(_errorText),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('OK'))
-                                  ],
-                                );
+                                return errorDialog(context, _errorText);
                               });
                         }
                       },
@@ -105,12 +92,26 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.of(context).pushNamed('/signUpPage');
                       },
                       child: Text('登録')),
-                ]),
-          ),
-          Text(_infoText),
-        ],
+                ],
+              ),
+            ),
+            Text(_infoText),
+          ],
+        ),
       ),
-    ));
+    );
+  }
+
+  /// Error Dialog 部分
+  AlertDialog errorDialog(BuildContext context, String errorText) {
+    return AlertDialog(
+      title: const Text("ログインに失敗しました"),
+      content: Text(errorText),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.pop(context), child: const Text('OK')),
+      ],
+    );
   }
 }
 
@@ -131,7 +132,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final UserState userState = Provider.of<UserState>(context);
+    final AuthenticationDataClass userState =
+        Provider.of<AuthenticationDataClass>(context);
     // Regular expression for password validation
     RegExp pattern = RegExp(r"(?=.*[a-z])(?=.*[A-Z])\w+");
     bool passCheckBool = true;

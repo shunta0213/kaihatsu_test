@@ -3,11 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-import 'package:kaihatsudojo/pages/top.dart';
-import 'package:kaihatsudojo/pages/addDishes.dart';
-import 'package:kaihatsudojo/pages/viewPage.dart';
-import 'package:kaihatsudojo/pages/authentication.dart';
+import 'package:kaihatsudojo/view/pages/top.dart';
+import 'package:kaihatsudojo/view/pages/addDishes.dart';
+import 'package:kaihatsudojo/view/pages/viewPage.dart';
+import 'package:kaihatsudojo/view/pages/authentication.dart';
 import 'package:kaihatsudojo/components/dishList.dart';
+import 'package:kaihatsudojo/model/authenticationData.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,23 +17,13 @@ void main() async {
   runApp(MyApp());
 }
 
-class UserState extends ChangeNotifier {
-  User? user;
-
-  void setUser(User newUser) {
-    user = newUser;
-    notifyListeners();
-  }
-}
-
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  final UserState userState = UserState();
+  final AuthenticationDataClass userState = AuthenticationDataClass();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserState>(
-      create: (context) => UserState(),
+    return MultiProvider(
       child: MaterialApp(
         // for debug
         debugShowCheckedModeBanner: false,
@@ -39,7 +31,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
         ),
         routes: {
-          '/loginPage': (context) => const LoginPage(),
+          '/loginPage': (context) => LoginPage(),
           '/signUpPage': (context) => const SignUpPage(),
           '/mainPage': (BuildContext context) => const TopPage(),
           '/addDishes': (BuildContext context) => const AddDishes(),
@@ -57,8 +49,11 @@ class MyApp extends StatelessWidget {
                 icon: Image.asset('assets/images/logo_1.png'),
               ),
         },
-        home: const LoginPage(),
+        home: LoginPage(),
       ),
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthenticationDataClass()),
+      ],
     );
   }
 }
