@@ -14,8 +14,8 @@ class AuthenticationDataClass extends ChangeNotifier {
 
 
   /// ErrorTextの変更を通知するメソッド
-  void setErrorText(String oldErrorText, String newErrorText) {
-    oldErrorText = newErrorText;
+  void setErrorText(String errorText, String newErrorText) {
+    errorText = newErrorText;
     notifyListeners();
   }
 

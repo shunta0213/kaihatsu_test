@@ -15,8 +15,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationDataClass dataClass =
-        Provider.of<AuthenticationDataClass>(context);
+    final AuthenticationDataClass dataClass =  ;
 
     return Scaffold(
       body: Center(
@@ -81,7 +80,11 @@ class LoginPage extends StatelessWidget {
                           showDialog(
                               context: context,
                               builder: (_) {
-                                return errorDialog(context, _errorText);
+                                return Consumer<AuthenticationDataClass>(
+                                  builder: (context, data, child) {
+                                    return errorDialog(context, _errorText);
+                                  },
+                                );
                               });
                         }
                       },

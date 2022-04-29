@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return ChangeNotifierProvider(
+      create: (context) => AuthenticationDataClass(),
       child: MaterialApp(
         // for debug
         debugShowCheckedModeBanner: false,
@@ -51,9 +52,6 @@ class MyApp extends StatelessWidget {
         },
         home: LoginPage(),
       ),
-      providers: [
-        ChangeNotifierProvider(create: (context) => AuthenticationDataClass()),
-      ],
     );
   }
 }
