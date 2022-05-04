@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kaihatsudojo/view/top/topDate.dart';
+import 'package:kaihatsudojo/view/top/topDishList.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({Key? key}) : super(key: key);
@@ -47,43 +49,13 @@ class _TopPageState extends State<TopPage> {
     ];
     // end
 
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day, 0, 0, 0);
-    final double deviceHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
 
     return Scaffold(
       // 基本はここに書いていく
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(today.toString()),
-          FutureBuilder<QuerySnapshot>(
-            future: userDishes.orderBy('date', descending: false).startAt(
-                [Timestamp.fromDate(today)]).get(),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return const Text('Something went wrong.');
-              } else if (snapshot.connectionState != ConnectionState.done) {
-                return const CircularProgressIndicator();
-              }
-
-              return SizedBox(
-                height: deviceHeight * 0.5,
-                child: ListView(
-                  children: snapshot.data!.docs.map((
-                      DocumentSnapshot document) {
-                    return ListTile(
-                      title: Text(document.get('name')),
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
+        children: const [
+          Date(),
+          TopDishesList(),
         ],
       ),
 

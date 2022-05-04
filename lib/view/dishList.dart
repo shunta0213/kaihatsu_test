@@ -26,25 +26,26 @@ class ListPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: deviceHeight * 0.1,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: icon,
+          Padding(
+            padding: const EdgeInsets.only(top: 40, bottom: 8),
+            child: SizedBox(
+              height: deviceHeight * 0.1,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: icon,
+              ),
             ),
           ),
-          FutureBuilder<QuerySnapshot>(
-            future: userDishes.where('genre', isEqualTo: genre).get(),
+          StreamBuilder<QuerySnapshot>(
+            stream: userDishes.where('genre', isEqualTo: genre).snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 return const Text('Something went wrong');
-              } else if (snapshot.connectionState != ConnectionState.done) {
-                return const CircularProgressIndicator();
               }
 
-              return SizedBox(
-                height: deviceHeight * 0.7,
+              return Expanded(
+                flex: 1,
                 child: ListView(
                   children:
                       snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -61,10 +62,14 @@ class ListPage extends StatelessWidget {
                       subtitle: Column(children: [
                         Text(DateFormat('作成日 : yyyy/MM/dd')
                             .format(document.get('date').toDate())),
-                        Text(document.get('notes') ?? ''),
+                        Text(document.get('notes') ?? 'なにもないよ！'),
                       ]),
                       trailing: TextButton(
-                          onPressed: () async => deleteDish(uid: uid, document: document),
+                          onPressed: () async => deleteDish(
+                                context: context,
+                                uid: uid,
+                                document: document,
+                              ),
                           child: const Icon(Icons.delete)),
                       dense: true,
                       contentPadding: const EdgeInsets.all(8),

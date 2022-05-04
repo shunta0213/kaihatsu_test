@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../view/authentication/singUp.dart';
 import '../view/dishList.dart';
-import '../view/top.dart';
+import '../view/top/top.dart';
 import '../view/genreList/genrePage.dart';
 import '../view/addDishes.dart';
 import '../view/authentication/singIn.dart';

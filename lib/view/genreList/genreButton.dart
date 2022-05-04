@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../const/images.dart';
 
+/// ジャンルページのボタン
 class GenreButton extends StatelessWidget {
   final double height;
   final Widget image;
