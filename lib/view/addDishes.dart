@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kaihatsudojo/model/addDishesData.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+
+import '../const/genreList.dart';
 
 class AddDishes extends StatefulWidget {
   const AddDishes({Key? key}) : super(key: key);
@@ -23,7 +26,6 @@ class _AddDishesState extends State<AddDishes> {
   DateTime now = DateTime.now();
   DateFormat formattedDate = DateFormat('yyyy-MM-dd');
 
-
   @override
   Widget build(BuildContext context) {
     // For Firestore
@@ -39,23 +41,18 @@ class _AddDishesState extends State<AddDishes> {
             Container(
               // width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: DropdownButton(
+              child: DropdownButton2(
                 alignment: AlignmentDirectional.center,
                 isExpanded: true,
-                items: const <DropdownMenuItem<String>>[
-                  DropdownMenuItem(
-                    child: Text('牛'),
-                    value: '牛',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('鶏肉'),
-                    value: '鶏肉',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('豚肉'),
-                    value: '豚',
-                  ),
-                ],
+                items: Genre.genre
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(
+                          item,
+                        ),
+                      ),
+                    ).toList(),
                 value: _genre,
                 onChanged: (String? value) {
                   setState(() {
@@ -114,7 +111,12 @@ class _AddDishesState extends State<AddDishes> {
             ),
             TextButton(
               onPressed: () async {
-                addDishes(context, uid: uid, dishName: _dishName!, genre: _genre!, notes: _notes!, now: now);
+                addDishes(context,
+                    uid: uid,
+                    dishName: _dishName!,
+                    genre: _genre!,
+                    notes: _notes!,
+                    now: now);
               },
               child: const Icon(
                 Icons.check_circle,
@@ -132,7 +134,6 @@ class _AddDishesState extends State<AddDishes> {
           child: const Icon(Icons.clear),
           onPressed: () => Navigator.of(context).pop(),
         ),
-
       ),
     );
   }
