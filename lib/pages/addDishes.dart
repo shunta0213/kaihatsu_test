@@ -133,7 +133,6 @@ class _AddDishesState extends State<AddDishes> {
         ),
       ),
 
-      // Xボタン
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         padding: const EdgeInsets.only(bottom: 10.0),
@@ -141,6 +140,7 @@ class _AddDishesState extends State<AddDishes> {
           child: const Icon(Icons.clear),
           onPressed: () => Navigator.of(context).pop(),
         ),
+
       ),
     );
   }
