@@ -27,7 +27,7 @@ class _AddDishesState extends State<AddDishes> {
   Widget build(BuildContext context) {
     // For Firestore
     final uid = auth.currentUser!.uid;
-    DocumentReference user = db.collection('User').doc(uid);
+    CollectionReference user = db.collection(uid);
     //
     return Scaffold(
       // 基本ここに書いていく
@@ -113,7 +113,7 @@ class _AddDishesState extends State<AddDishes> {
             ),
             TextButton(
               onPressed: () async {
-                await user.collection(_genre!).doc(_dishName).set(
+                await user.doc(_dishName).set(
                   {
                     'name': _dishName,
                     'genre': _genre,

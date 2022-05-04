@@ -25,8 +25,8 @@ class ListPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(
-            flex: 1,
+          SizedBox(
+            height: deviceHeight * 0.1,
             child: Align(
               alignment: Alignment.bottomCenter,
               child: icon,
@@ -43,44 +43,40 @@ class ListPage extends StatelessWidget {
                 return const CircularProgressIndicator();
               }
 
-              return Flexible(
-                flex: 8,
-                child: SizedBox(
-                  height: deviceHeight * 0.7,
-                  child: ListView(
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-
-                      return ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        tileColor: Colors.white,
-                        leading: const Icon(
-                          Icons.circle,
-                          size: 10,
-                        ),
-                        title: Text(document.get('name')),
-                        subtitle: Column(children: [
-                          Text(DateFormat('作成日 : yyyy/MM/dd')
-                              .format(document.get('date').toDate())),
-                          Text(document.get('notes') ?? ''),
-                        ]),
-                        trailing: TextButton(
-                            onPressed: () async {
-                              await FirebaseFirestore.instance
-                                  .collection('User')
-                                  .doc(uid)
-                                  .collection(genre!)
-                                  .doc(document.get('name'))
-                                  .delete();
-                            },
-                            child: const Icon(Icons.delete)),
-                        dense: true,
-                        contentPadding: const EdgeInsets.all(8),
-                      );
-                    }).toList(),
-                  ),
+              return SizedBox(
+                height: deviceHeight * 0.7,
+                child: ListView(
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      tileColor: Colors.white,
+                      leading: const Icon(
+                        Icons.circle,
+                        size: 10,
+                      ),
+                      title: Text(document.get('name')),
+                      subtitle: Column(children: [
+                        Text(DateFormat('作成日 : yyyy/MM/dd')
+                            .format(document.get('date').toDate())),
+                        Text(document.get('notes') ?? ''),
+                      ]),
+                      trailing: TextButton(
+                          onPressed: () async {
+                            await FirebaseFirestore.instance
+                                .collection('User')
+                                .doc(uid)
+                                .collection(genre!)
+                                .doc(document.get('name'))
+                                .delete();
+                          },
+                          child: const Icon(Icons.delete)),
+                      dense: true,
+                      contentPadding: const EdgeInsets.all(8),
+                    );
+                  }).toList(),
                 ),
               );
             },
