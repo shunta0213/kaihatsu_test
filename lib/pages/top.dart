@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,9 @@ class _TopPageState extends State<TopPage> {
   @override
   Widget build(BuildContext context) {
     // For Firebase Auth and Firestore
-    final auth = FirebaseAuth.instance;
-    final uid = auth.currentUser!.uid;
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final CollectionReference userDishes = FirebaseFirestore.instance
+        .collection(uid);
 
     // For Bottom Bar
     bool _currentIndexColor = true;
@@ -45,12 +47,43 @@ class _TopPageState extends State<TopPage> {
     ];
     // end
 
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day, 0, 0, 0);
+    final double deviceHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+
     return Scaffold(
       // 基本はここに書いていく
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(uid),
+          Text(today.toString()),
+          FutureBuilder<QuerySnapshot>(
+            future: userDishes.orderBy('date', descending: false).startAt(
+                [Timestamp.fromDate(today)]).get(),
+            builder: (BuildContext context,
+                AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong.');
+              } else if (snapshot.connectionState != ConnectionState.done) {
+                return const CircularProgressIndicator();
+              }
+
+              return SizedBox(
+                height: deviceHeight * 0.5,
+                child: ListView(
+                  children: snapshot.data!.docs.map((
+                      DocumentSnapshot document) {
+                    return ListTile(
+                      title: Text(document.get('name')),
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          ),
         ],
       ),
 

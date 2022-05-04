@@ -18,7 +18,7 @@ class ListPage extends StatelessWidget {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final FirebaseFirestore db = FirebaseFirestore.instance;
     final String uid = auth.currentUser!.uid;
-    final DocumentReference user = db.collection('User').doc(uid);
+    final CollectionReference userDishes = db.collection(uid);
     final double deviceHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -33,8 +33,7 @@ class ListPage extends StatelessWidget {
             ),
           ),
           FutureBuilder<QuerySnapshot>(
-            future:
-                user.collection(genre!).orderBy('date', descending: true).get(),
+            future: userDishes.where('genre', isEqualTo: genre).get(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {

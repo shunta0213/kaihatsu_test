@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kaihatsudojo/model/addDishesData.dart';
 
 class AddDishes extends StatefulWidget {
   const AddDishes({Key? key}) : super(key: key);
@@ -113,16 +114,7 @@ class _AddDishesState extends State<AddDishes> {
             ),
             TextButton(
               onPressed: () async {
-                await user.doc(_dishName).set(
-                  {
-                    'name': _dishName,
-                    'genre': _genre,
-                    'notes': _notes,
-                    'date': now,
-                  },
-                  SetOptions(merge: true),
-                ).catchError((error) => print('error : $error'));
-                Navigator.of(context).pop();
+                addDishes(context, uid: uid, dishName: _dishName!, genre: _genre!, notes: _notes!, now: now);
               },
               child: const Icon(
                 Icons.check_circle,

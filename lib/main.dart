@@ -7,7 +7,7 @@ import 'package:kaihatsudojo/pages/top.dart';
 import 'package:kaihatsudojo/pages/addDishes.dart';
 import 'package:kaihatsudojo/pages/viewPage.dart';
 import 'package:kaihatsudojo/pages/authentication/singUp.dart';
-import 'package:kaihatsudojo/components/dishList.dart';
+import 'package:kaihatsudojo/pages/dishList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
