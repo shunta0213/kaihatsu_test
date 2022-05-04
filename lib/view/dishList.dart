@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kaihatsudojo/model/dishListData/deleteDish.dart';
 
 class ListPage extends StatelessWidget {
   final String? genre;
@@ -63,14 +64,7 @@ class ListPage extends StatelessWidget {
                         Text(document.get('notes') ?? ''),
                       ]),
                       trailing: TextButton(
-                          onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection('User')
-                                .doc(uid)
-                                .collection(genre!)
-                                .doc(document.get('name'))
-                                .delete();
-                          },
+                          onPressed: () async => deleteDish(uid: uid, document: document),
                           child: const Icon(Icons.delete)),
                       dense: true,
                       contentPadding: const EdgeInsets.all(8),
